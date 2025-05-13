@@ -9,8 +9,4 @@ public class Rezervare {
         statusRezervare = null;
 
     }
-
-
-
-
 }

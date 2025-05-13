@@ -2,7 +2,7 @@ package clases;
 
 import java.util.ArrayList;
 
-public class Staff extends Persoana{
+public class Staff extends Persoana {
     private int staffID;
     private int salariu;
     private FunctieStaff functie;
@@ -21,9 +21,9 @@ public class Staff extends Persoana{
         this.zonaFestival = zonaFestival;
         this.ecranizari = new ArrayList<>();
     }
-    public boolean valideazaManager()
-    {
-        if (this.functie==FunctieStaff.Manager_Festival)
+
+    public boolean valideazaManager() {
+        if (this.functie == FunctieStaff.Manager_Festival)
             return true;
         else
             return false;
