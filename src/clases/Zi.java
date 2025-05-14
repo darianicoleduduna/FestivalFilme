@@ -22,4 +22,17 @@ public class Zi {
         return data;
     }
 
+    public void adauga_ecranizare(Ecranizare ecranizare) {
+        ecranizari.add(ecranizare);
+    }
+
+    boolean exista_ecranizare(int e_id){
+        for(int u=0;u<ecranizari.size();u++){
+            if(ecranizari.get(u).getEcranizareID() == e_id)
+                return true;
+
+        }
+        return false;
+    }
+
 }

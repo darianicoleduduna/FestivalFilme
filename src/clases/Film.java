@@ -48,34 +48,42 @@ public class Film {
     }
 
     public String getNume() {
+
         return nume;
     }
 
     public void setNume(String nume) {
+
         this.nume = nume;
     }
 
     public String getAn() {
+
         return an;
     }
 
     public void setAn(String an) {
+
         this.an = an;
     }
 
     public String getRegizor() {
+
         return regizor;
     }
 
     public void setRegizor(String regizor) {
+
         this.regizor = regizor;
     }
 
     public int getDurata() {
+
         return durata;
     }
 
     public void setDurata(int durata) {
+
         this.durata = durata;
     }
 
@@ -95,11 +103,36 @@ public class Film {
     }
 
     public void setRestrictie(RestrictiiFilme restrictie) {
+
         this.restrictie = restrictie;
     }
-
+    public Ecranizare get_ecranizarebyindex(int index){
+        return this.ecranizari_programate.get(index);
+    }
     public void adaugaEcranizare(Ecranizare ecranizare) {
+
         this.ecranizari_programate.add(ecranizare);
+    }
+    public String  tostring_film(){
+        String s;
+        s=nume+ "An: "+ an  + " " + categorie + " " + restrictie + "  Regizor: " + regizor + " " +durata+ "min ";
+        return s;
+    }
+
+    public void afiseaza_ecranizari(ArrayList<Zi> zile)
+    {
+        String data=null;
+        for(int i=0; i<this.ecranizari_programate.size(); i++)
+        {
+            for(int j=0; j<zile.size(); j++)
+               if (zile.get(j).exista_ecranizare(ecranizari_programate.get(i).getEcranizareID()))
+                   data=zile.get(j).getData();
+            if(data != null)
+                System.out.println(i +" :" +data + ecranizari_programate.get(i).tostring_ecranizare());
+
+        }
+
+
     }
 
 }

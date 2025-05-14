@@ -78,7 +78,7 @@ public class Sala {
     }
 
 
-    public boolean alocareSala(Ecranizare ecranizare) {
+    public void alocareSala(Ecranizare ecranizare) {
         for(int i=0; i<program_ecranizari.size(); i++)
         {
             Ecranizare e = program_ecranizari.get(i);
@@ -91,7 +91,8 @@ public class Sala {
                 boolean seSuprapun = !(comparareOre(end1, start2) <= 0 || comparareOre(end2, start1) <= 0);
 
                 if (seSuprapun) {
-                    return false;
+                    System.out.println("Nu se poate aloca sala pentru aceasta ecranizare");
+                    return;
                 }
             }
 
@@ -99,9 +100,9 @@ public class Sala {
         ecranizare.setNrRanduri(nrRanduri);
         ecranizare.setNrColoane(nrColoane);
         ecranizare.setNrLocuriLibere(nrLocuri);
+        ecranizare.initializare_locuri_libere();
         program_ecranizari.add(ecranizare);
 
-        return true;
     }
 
 

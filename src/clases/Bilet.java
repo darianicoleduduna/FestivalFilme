@@ -9,10 +9,14 @@ public class Bilet {
     private Zi zi;
     private CategorieBilet categorieBilet;
     private Rezervare[] rezervari;
+    private int indexr;
 
     public Bilet(String data) {
         this.biletID = ++this.last_id;
         this.data = data;
+        rezervari = new Rezervare[50];
+        indexr=0;
+
     }
 
 
@@ -30,6 +34,11 @@ public class Bilet {
 
     public void setData(String data) {
         this.data = data;
+    }
+
+    public void adaugaRezervare(Rezervare rezervare) {
+        rezervari[indexr] = rezervare;
+        indexr++;
     }
 
     public void afisare() {

@@ -2,6 +2,7 @@ package clases;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Scanner;
 
 public class Client extends Persoana {
     private static int last_id = 0;
@@ -72,8 +73,29 @@ public class Client extends Persoana {
             this.permisiuneFilme = RestrictiiFilme.AudientaGenerala;
     }
 
-    public void cumparaBilet(int tip_bilet, String data, int ecranizareID)
+    public boolean poateViziona(Film film) {
+        return this.permisiuneFilme.ordinal() >= film.getRestrictie().ordinal();
+    }
+
+
+    public void cumparaBilet( ArrayList<Film> filme_disponibile, ArrayList<Zi> zile_festival)
     {
+        int tip_bilet,index;
+        Scanner s = new Scanner(System.in);
+        do {
+
+
+            System.out.println("Alegeti tipul biletului:");
+            System.out.println("1-Bilet pentru un film.");
+            System.out.println("2-Bilet pentru o zi din festival.");
+            System.out.println("3-Bilet pentru intreg festivalul.");
+            tip_bilet=s.nextInt();
+
+        }
+        while(tip_bilet>3 || tip_bilet<1);
+
+
+
         if(tip_bilet == 3) //festival
         {
             Bilet b = new Bilet(null);
@@ -81,12 +103,29 @@ public class Client extends Persoana {
         }
         else if(tip_bilet == 2)
         {
-            Bilet b = new Bilet(data);
-            bilete_disponibile.add(b);
+            //Bilet b = new Bilet(data);
+            //bilete_disponibile.add(b);
         }
         else {
-            Bilet b = new Bilet(data);
+            int filmdorit;
+            Bilet b = new Bilet(null);
+
+
+            System.out.println("Filmele disponibile sunt :");
+            for (int i=0; i<filme_disponibile.size(); i++)
+                System.out.println( (i+1)+":"+ filme_disponibile.get(i).tostring_film());
+            System.out.println("Introduceti nr pt filmul dorit");
+            filmdorit=s.nextInt() - 1;
+
+            filme_disponibile.get(filmdorit).afiseaza_ecranizari(zile_festival);
+            System.out.println("Introduceti nr ecranizarii dorite: ");
+            index=s.nextInt();
+            filme_disponibile.get(filmdorit).get_ecranizarebyindex(index).rezervareLoc(b);
+
+
             bilete_disponibile.add(b);
+
+
         }
     }
 }
