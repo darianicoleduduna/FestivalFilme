@@ -131,8 +131,14 @@ public class Film {
                 System.out.println(i +" :" +data + ecranizari_programate.get(i).tostring_ecranizare());
 
         }
+    }
 
-
+    public boolean exista_ecranizare(int eID){
+        for(int u=0;u<ecranizari_programate.size();u++) {
+            if (ecranizari_programate.get(u).getEcranizareID() == eID)
+                return true;
+        }
+        return false;
     }
 
 }

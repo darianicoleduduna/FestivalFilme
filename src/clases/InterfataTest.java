@@ -8,17 +8,17 @@ public class InterfataTest {
     public static void main(String[] args) {
 
         ArrayList<Zi> zile = new ArrayList<Zi>();
-        Zi zi1= new Zi("17.04.2003");
-        Zi zi2= new Zi("18.04.2003");
-        Zi zi3= new Zi("19.04.2003");
+        Zi zi1= new Zi("17.04.2025");
+        Zi zi2= new Zi("18.04.2025");
+        Zi zi3= new Zi("19.04.2025");
 
 
         Film [] films = new Film[5];
         films[0] = new Film("HP1", "2001", "Daria", 120, RestrictiiFilme.AcordParental13ani, CategoriiFilme.Fantasy);
         films[1] = new Film("HP2", "2002", "Daria", 120, RestrictiiFilme.AcordParental13ani, CategoriiFilme.Fantasy);
         films[2] = new Film("HP3", "2004", "Daria", 120, RestrictiiFilme.AcordParental13ani, CategoriiFilme.Fantasy);
-        films[3] = new Film("HP4", "2005", "Daria", 120, RestrictiiFilme.AcordParental13ani, CategoriiFilme.Fantasy);
-        films[4] = new Film("HP5", "2007", "Daria", 120, RestrictiiFilme.AcordParental13ani, CategoriiFilme.Fantasy);
+        films[3] = new Film("HP4", "2005", "Daria", 120, RestrictiiFilme.AudientaGenerala, CategoriiFilme.Fantasy);
+        films[4] = new Film("HP5", "2007", "Daria", 120, RestrictiiFilme.AudientaGenerala, CategoriiFilme.Fantasy);
 
         Sala [] sals = new Sala[5];
         sals[0] = new Sala("Sala1", 10, 20);
@@ -31,21 +31,24 @@ public class InterfataTest {
         e1.adaugaEcranizare(films[0], sals[0],zi1);
 
 
-        Ecranizare e2 = new Ecranizare("14:15", "16:00", "13.5.2025");
+        Ecranizare e2 = new Ecranizare("14:15", "16:00", "17.04.2025");
         e2.adaugaEcranizare(films[1], sals[1],zi1);
         //System.out.println(s1.alocareSala(e2));
-        Ecranizare e3 = new Ecranizare("12:15", "13:15", "13.5.2025");
+        Ecranizare e3 = new Ecranizare("17:15", "19:15", "17.04.2025");
         //System.out.println(s1.alocareSala(e3));
-        e3.adaugaEcranizare(films[2], sals[2],zi2);
-        Ecranizare e4 = new Ecranizare("13:15", "14:15", "13.5.2025");
+        e3.adaugaEcranizare(films[2], sals[2],zi1);
+        Ecranizare e4 = new Ecranizare("13:20", "14:15", "18.04.2025");
         //System.out.println(s1.alocareSala(e4));
-        e3.adaugaEcranizare(films[2], sals[3],zi2);
-        Ecranizare e5 = new Ecranizare("12:30", "14:45", "13.5.2025");
+        e4.adaugaEcranizare(films[4], sals[3],zi2);
+        Ecranizare e5 = new Ecranizare("9:00", "10:30", "18.04.2025");
         //System.out.println(s1.alocareSala(e5));
-        Ecranizare e6 = new Ecranizare("11:30", "12:45", "13.5.2025");
+        e5.adaugaEcranizare(films[3], sals[3],zi2);
+        Ecranizare e6 = new Ecranizare("11:30", "12:45", "19.04.2025");
         //System.out.println(s1.alocareSala(e6));
-        Ecranizare e7 = new Ecranizare("14:45", "16:45", "13.5.2025");
+        e6.adaugaEcranizare(films[2], sals[4],zi3);
+        Ecranizare e7 = new Ecranizare("14:45", "16:45", "19.04.2025");
         //System.out.println(s1.alocareSala(e7));
+        e7.adaugaEcranizare(films[1], sals[4],zi3);
 
         Client c1 = new Client("Duduna", "Daria", "c", "0745682515", "17.04.2003");
         Client c2 = new Client("Enache", "Vlad", "a", "0745682123", "02.07.2003");
@@ -67,11 +70,15 @@ public class InterfataTest {
         filme.add(films[2]);
         filme.add(films[3]);
         filme.add(films[4]);
+        Client vlad = new Client("vlad", "rares", "vlad@gmail.com", "0745022251", "13.03.2017");
+        vlad.setareRestrictiiFilme();
+        clienti.add(vlad);
 
         ArrayList<Sala> sali = new ArrayList<Sala>();
         ArrayList<Plata> plati = new ArrayList<Plata>();
         ArrayList<Rezervare> rezervari = new ArrayList<Rezervare>();
         Client logat=null;
+        ArrayList<Bilet> bilete_temp = new ArrayList<>();
 
         char optiune;
         String text;
@@ -94,6 +101,7 @@ public class InterfataTest {
                 System.out.println("d - detalii clienti");
                 System.out.println("c - cumpara bilet");
                 System.out.println("r - rezerva loc");
+                System.out.println("p - plateste");
                 System.out.println("e - iesire");
                 optiune = scanner.next().charAt(0);
                 scanner.nextLine();
@@ -166,10 +174,31 @@ public class InterfataTest {
                 }
                 else if (optiune == 'c')
                 {
-                    if(logat != null)
-                        logat.cumparaBilet(filme,zile);
+                    if(logat != null) {
+                        ArrayList<Bilet> bilete_client = logat.cumparaBilet(filme, zile);
+                        if (bilete_client != null) {
+                            bilete_temp.addAll(bilete_client);
+                        }
+                    }
                     else
                         System.out.println("Trebuie sa va logati. Alegeti l.");
+                }
+                else if (optiune == 'p')
+                {
+                    if (logat != null && !bilete_temp.isEmpty()) {
+                        Bilet[] bileteArray = new Bilet[bilete_temp.size()];
+                        bilete_temp.toArray(bileteArray);
+                        Plata plata = logat.plateste(bileteArray);
+                        if (plata != null && (plata.getStatusPlata() == StatusPlata.Procesata || plata.getStatusPlata() == StatusPlata.In_asteptare)) {
+                            bilete.addAll(bilete_temp);
+                            bilete_temp.clear();
+                            plati.add(plata);
+                        }
+                    } else if (logat == null) {
+                        System.out.println("Trebuie sa va logati. Alegeti l.");
+                    } else {
+                        System.out.println("Nu aveti bilete de platit.");
+                    }
                 }
                 else if (optiune == 'd')
                 {

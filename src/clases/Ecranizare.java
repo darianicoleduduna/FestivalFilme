@@ -120,11 +120,15 @@ public class Ecranizare {
 
     public void adaugaEcranizare(Film f, Sala s, Zi z)
     {
-        f.adaugaEcranizare(this);
-        s.alocareSala(this);
-        z.adauga_ecranizare(this);
+        boolean SeSuprapun;
+        SeSuprapun = s.alocareSala(this);
+        if (!SeSuprapun) {
+            System.out.println("cacuta");
+            f.adaugaEcranizare(this);
+            z.adauga_ecranizare(this);
+        }
     }
     public String tostring_ecranizare(){
-        return "de la " +oraInceput + " pana la "+ oraFinal;
+        return " de la " +oraInceput + " pana la "+ oraFinal;
     }
 }
