@@ -1,4 +1,5 @@
 package clases;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -70,7 +71,7 @@ public class InterfataTest {
         filme.add(films[2]);
         filme.add(films[3]);
         filme.add(films[4]);
-        Client vlad = new Client("vlad", "rares", "vlad@gmail.com", "0745022251", "13.03.2017");
+        Client vlad = new Client("vlad", "rares", "vlad@gmail.com", "0745022251", "13.03.2000");
         vlad.setareRestrictiiFilme();
         clienti.add(vlad);
 
@@ -98,9 +99,10 @@ public class InterfataTest {
                 System.out.println("Alegeti o optiune de client: ");
                 System.out.println("a - adauga client");
                 System.out.println("l - logare");
-                System.out.println("d - detalii clienti");
+                System.out.println("d - vizularizare detalii cont");
                 System.out.println("c - cumpara bilet");
-                System.out.println("r - rezerva loc");
+                System.out.println("v- vizulaizeaza bilet");
+                System.out.println("m -modifica bilet");
                 System.out.println("p - plateste");
                 System.out.println("e - iesire");
                 optiune = scanner.next().charAt(0);
@@ -200,13 +202,45 @@ public class InterfataTest {
                         System.out.println("Nu aveti bilete de platit.");
                     }
                 }
+                //afisam detaliile aferente contului
                 else if (optiune == 'd')
                 {
+                    if(logat != null) {
+                        System.out.println(logat.getDetaliiClient());
+                    }
+                    else
+                        System.out.println("Trebuie sa va logati. Alegeti l.");
+                }
+                //modifica bilet
+                else if (optiune == 'm')
+                {
+                    if(logat != null)
+                        if (logat.getNrBilete()>0)  {
+                            System.out.println("Alegeti cum vreti sa modificati biletul:");
+                            System.out.println("r- rezerva loc");
+                            System.out.println("a - anuleaza bilet");
+                            optiune = scanner.next().charAt(0);
+                            scanner.nextLine();
+                            if(optiune == 'r')
+                            {
+
+
+                            }
+                            if (optiune == 'a')
+                            {
+                                logat.anuleazaBilet(filme);
+                            }
+                        }
+                        else System.out.println("Nu aveti niciun bilet in cont. Pentru a cumpara apasati c.");
+                    else System.out.println("Trebuie sa va logati. Alegeti l.");
 
                 }
-                else if (optiune == 'r')
-                {
-
+                else if(optiune == 'v'){
+                    if(logat != null) {
+                        logat.vizualizeazaBilete(filme,zile);
+                    }
+                    else
+                        System.out.println("Trebuie sa va logati. Alegeti l.");
                 }
                 else if(optiune == 'e')
                     break;

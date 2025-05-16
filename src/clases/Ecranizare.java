@@ -60,6 +60,18 @@ public class Ecranizare {
         return nrLocuriLibere;
     }
 
+    public ArrayList<Rezervare> getRezervari() {
+        return rezervari;
+    }
+
+    public ArrayList<Bilet> getBileteCumparate() {
+        return bilete_cumparate;
+    }
+
+    public ArrayList<Staff> getSupraveghetori() {
+        return supraveghetori;
+    }
+
     public void setNrLocuriLibere(int nrLocuriLibere) {this.nrLocuriLibere = nrLocuriLibere;}
 
     public void setNrRanduri(int nrRanduri) {this.nrRanduri = nrRanduri;}
@@ -130,5 +142,11 @@ public class Ecranizare {
     }
     public String tostring_ecranizare(){
         return " de la " +oraInceput + " pana la "+ oraFinal;
+    }
+    public void elibereazaLoc(int rand, int coloana) {
+        if (locuri_libere[rand][coloana] == 1) {
+            locuri_libere[rand][coloana] = 0;
+            nrLocuriLibere++;
+        }
     }
 }

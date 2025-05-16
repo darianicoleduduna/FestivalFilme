@@ -58,6 +58,11 @@ public class Zi {
             }
         }
     }
+
+    public ArrayList<Ecranizare> getEcranizari() {
+        return ecranizari;
+    }
+
     public Ecranizare get_ecranizarebyindex(int index){
         return this.ecranizari.get(index);
     }

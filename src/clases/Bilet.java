@@ -19,6 +19,12 @@ public class Bilet {
 
     }
 
+    public Rezervare[] getRezervari() {
+        return rezervari;
+    }
+    public void setRezervari(Rezervare[] rezervari) {
+        this.rezervari = rezervari;
+    }
 
     public int getBiletID() {
         return biletID;
