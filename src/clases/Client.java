@@ -5,6 +5,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Scanner;
+import java.time.temporal.ChronoUnit;
+
+
+import static clases.InterfataTest.profit_festival;
 
 public class Client extends Persoana {
     private static int last_id = 0;
@@ -42,12 +46,27 @@ public class Client extends Persoana {
         return ClientID;
     }
 
-    public RestrictiiFilme getPermisiuneFilme() {
-        return permisiuneFilme;
-    }
+    public float rambursare_bilet(Bilet biletDeAnulat, ArrayList<Zi> zile_festival){
 
-    public String getDataNasterii() {
-        return dataNasterii;
+        float rambursare=0;
+        if(getOreRamase(biletDeAnulat,zile_festival)>48 )
+        {
+
+            if(biletDeAnulat.verifica_tip_bilet()==CategorieBilet.Bilet_film)
+                rambursare=40;
+            else if (biletDeAnulat.verifica_tip_bilet()==CategorieBilet.Bilet_zi)
+                rambursare=100;
+            else rambursare=250;
+        }
+        else if(getOreRamase(biletDeAnulat,zile_festival)>24 )
+        {
+            if(biletDeAnulat.verifica_tip_bilet()==CategorieBilet.Bilet_film)
+                rambursare=20;
+            else if (biletDeAnulat.verifica_tip_bilet()==CategorieBilet.Bilet_zi)
+                rambursare=50;
+            else rambursare=125;
+        }
+        return rambursare;
     }
 
     public int determinareVarsta()
@@ -94,6 +113,27 @@ public class Client extends Persoana {
                 ", Numar bilete: " + bilete_disponibile.size();
     }
 
+    public long getOreRamase(Bilet b, ArrayList<Zi> zileFestival) {
+        LocalDateTime acum = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+
+        try {
+            if (b.verifica_tip_bilet() == CategorieBilet.Bilet_zi && b.getZi() != null) {
+                LocalDateTime ziBilet = LocalDateTime.parse(b.getZi().getData() + " 00:00", formatter);
+                return ChronoUnit.HOURS.between(acum, ziBilet);
+            }
+
+            if (b.verifica_tip_bilet() == CategorieBilet.Bilet_festival && !zileFestival.isEmpty()) {
+                LocalDateTime primaZi = LocalDateTime.parse(zileFestival.get(0).getData() + " 00:00", formatter);
+                return ChronoUnit.HOURS.between(acum, primaZi);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return -1;
+    }
 
     public ArrayList<Bilet> cumparaBilet( ArrayList<Film> filme_disponibile, ArrayList<Zi> zile_festival)
     {
@@ -221,6 +261,7 @@ public class Client extends Persoana {
             data_curenta = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
             Plata p = new Plata(data_curenta, s, metodaP, bilete);
             System.out.println("Plata inregistrata. Procesarea platii poate dura cateva minute. ");
+            profit_festival=profit_festival+s;
             return p;
         }
         Plata p = new Plata();
@@ -228,7 +269,7 @@ public class Client extends Persoana {
         return p;
     }
 
-    public void anuleazaBilet(ArrayList<Film> filme_disponibile) {
+    public void anuleazaBilet(ArrayList<Film> filme_disponibile, ArrayList<Zi> zile_festival) {
         if (bilete_disponibile.isEmpty()) {
             System.out.println("Nu aveți bilete de anulat.");
             return;
@@ -268,6 +309,7 @@ public class Client extends Persoana {
 
         Bilet biletDeAnulat = bilete_disponibile.get(opt);
 
+
         // Eliberăm locurile rezervate și ștergem din ecranizări
         if (biletDeAnulat.getZi() != null && biletDeAnulat.getRezervari() != null) {
             for (Rezervare rez : biletDeAnulat.getRezervari()) {
@@ -282,12 +324,13 @@ public class Client extends Persoana {
                 }
             }
         }
-
+        float ramburs=rambursare_bilet(biletDeAnulat,zile_festival);
+        profit_festival-=ramburs;
         bilete_disponibile.remove(opt);
         System.out.println("Biletul a fost anulat cu succes.");
     }
 
-    public void anuleazaRezervareBilet() {
+    public void anuleazaRezervareBilet(ArrayList<Film> filme_disponibile, ArrayList<Zi> zile_festival, ArrayList<Sala> sali_disponibile) {
         if (bilete_disponibile.isEmpty()) {
             System.out.println("Nu aveți bilete.");
             return;
@@ -295,69 +338,117 @@ public class Client extends Persoana {
 
         Scanner s = new Scanner(System.in);
         System.out.println("Selectați biletul din care doriți să anulați o rezervare:");
-        for (int i = 0; i < bilete_disponibile.size(); i++) {
-            System.out.println((i + 1) + ": Tip - " + bilete_disponibile.get(i).verifica_tip_bilet());
+
+        ArrayList<Bilet> eligibile = new ArrayList<>();
+        for (Bilet b : bilete_disponibile) {
+            if ((b.verifica_tip_bilet() == CategorieBilet.Bilet_zi || b.verifica_tip_bilet() == CategorieBilet.Bilet_festival)
+                    && b.getRezervari() != null && b.getRezervari().length > 0) {
+                eligibile.add(b);
+            }
+        }
+
+        if (eligibile.isEmpty()) {
+            System.out.println("Nu există bilete de tip zi sau festival cu rezervări.");
+            return;
+        }
+
+        for (int i = 0; i < eligibile.size(); i++) {
+            System.out.println((i + 1) + ": Tip - " + eligibile.get(i).verifica_tip_bilet());
         }
 
         int bIndex = s.nextInt() - 1;
         s.nextLine();
-        if (bIndex < 0 || bIndex >= bilete_disponibile.size()) {
+        if (bIndex < 0 || bIndex >= eligibile.size()) {
             System.out.println("Index invalid.");
             return;
         }
 
-        Bilet b = bilete_disponibile.get(bIndex);
+        Bilet b = eligibile.get(bIndex);
         Rezervare[] rezervari = b.getRezervari();
 
-        if (rezervari == null || rezervari.length == 0) {
-            System.out.println("Acest bilet nu are nicio rezervare.");
+        ArrayList<Rezervare> rezervariValide = new ArrayList<>();
+        for (Rezervare r : rezervari) {
+            if (r != null) rezervariValide.add(r);
+        }
+
+        if (rezervariValide.isEmpty()) {
+            System.out.println("Biletul nu are rezervări active.");
             return;
         }
 
         System.out.println("Selectați rezervarea de anulat:");
-        for (int i = 0; i < rezervari.length; i++) {
-            Rezervare rez = rezervari[i];
-            System.out.println((i + 1) + ": Rand " + (rez.getRand() + 1) + ", Coloana " + (rez.getColoana() + 1));
+        for (int i = 0; i < rezervariValide.size(); i++) {
+            Rezervare rez = rezervariValide.get(i);
+
+            String filmStr = "necunoscut";
+            String salaStr = "necunoscut";
+            String ecranizareStr = "necunoscut";
+            String ziStr = "necunoscut";
+
+            for (Zi zi : zile_festival) {
+                for (Ecranizare e : zi.getEcranizari()) {
+                    if (e.getRezervari().contains(rez)) {
+                        ziStr = zi.getData();
+                        ecranizareStr = e.tostring_ecranizare();
+
+                        for (Film f : filme_disponibile) {
+                            if (f.exista_ecranizare(e.getEcranizareID())) {
+                                filmStr = f.tostring_film();
+                                break;
+                            }
+                        }
+
+                        for (Sala sala : sali_disponibile) {
+                            if (sala.getProgramEcranizari().contains(e)) {
+                                salaStr = sala.getNume();
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+
+            System.out.println((i + 1) + ": Rand " + (rez.getRand() + 1) + ", Coloană " + (rez.getColoana() + 1)
+                    + ", Film: " + filmStr + ", Sala: " + salaStr + ", Zi: " + ziStr + ", Ecranizare: " + ecranizareStr);
         }
 
         int rIndex = s.nextInt() - 1;
         s.nextLine();
-        if (rIndex < 0 || rIndex >= rezervari.length) {
+        if (rIndex < 0 || rIndex >= rezervariValide.size()) {
             System.out.println("Index invalid.");
             return;
         }
 
-        Rezervare deAnulat = rezervari[rIndex];
+        Rezervare deAnulat = rezervariValide.get(rIndex);
 
         // Eliberăm locul și ștergem din ecranizare
-        if (b.getZi() != null) {
-            for (Ecranizare e : b.getZi().getEcranizari()) {
+        for (Zi zi : zile_festival) {
+            for (Ecranizare e : zi.getEcranizari()) {
                 if (e.getRezervari().contains(deAnulat)) {
                     e.elibereazaLoc(deAnulat.getRand(), deAnulat.getColoana());
                     e.getRezervari().remove(deAnulat);
-                    e.getBileteCumparate().remove(b); // doar dacă nu mai are alte rezervări în acea ecranizare
+                    // Nu scoatem biletul din bilete_cumparate
                     break;
                 }
             }
         }
 
-        // Ștergem rezervarea din array-ul biletului
-        Rezervare[] newRezervari = new Rezervare[rezervari.length - 1];
-        for (int i = 0, j = 0; i < rezervari.length; i++) {
-            if (i != rIndex) {
-                newRezervari[j++] = rezervari[i];
+        // Ștergem rezervarea din bilet
+        Rezervare[] originale = b.getRezervari();
+        Rezervare[] nou = new Rezervare[originale.length];
+        int j = 0;
+        for (Rezervare r : originale) {
+            if (r != null && r.getRezervareId() != deAnulat.getRezervareId()) {
+                nou[j++] = r;
             }
         }
-        b.setRezervari(newRezervari);
+        b.setRezervari(nou);
 
-        System.out.println("Rezervarea a fost anulată.");
+        System.out.println("Rezervarea a fost anulată cu succes.");
     }
 
-    public void vizualizeazaBilete(ArrayList<Film> filme_disponibile, ArrayList<Zi> zile_festival) {
-        if (bilete_disponibile.isEmpty()) {
-            System.out.println("Nu aveți bilete.");
-            return;
-        }
+    public void vizualizeazaBilete(ArrayList<Film> filme_disponibile, ArrayList<Zi> zile_festival,ArrayList<Sala> sali_disponibile) {
 
         for (int i = 0; i < bilete_disponibile.size(); i++) {
             Bilet b = bilete_disponibile.get(i);
@@ -386,11 +477,19 @@ public class Client extends Persoana {
                                             break;
                                         }
                                     }
-
+                                    String salaStr = "necunoscută";
+                                    for (Sala sala : sali_disponibile) {
+                                        if (sala.getProgramEcranizari() != null &&
+                                                sala.getProgramEcranizari().contains(e)) {
+                                            salaStr = sala.getNume();
+                                            break;
+                                        }
+                                    }
                                     System.out.println("- Rand: " + (r.getRand() + 1)
                                             + ", Coloană: " + (r.getColoana() + 1)
                                             + ", Film: " + filmStr
                                             + ", Ecranizare: " + e.tostring_ecranizare()
+                                            + ", Sala: " + salaStr
                                             + ", Zi: " + zi.getData());
                                     afisat = true;
                                     break;
@@ -411,10 +510,85 @@ public class Client extends Persoana {
         }
     }
 
+    public void adaugaRezervareInBilet(ArrayList<Film> filme_disponibile, ArrayList<Zi> zile_festival) {
+        Scanner s = new Scanner(System.in);
 
+        // Filtrăm biletele eligibile
+        ArrayList<Bilet> bileteEligibile = new ArrayList<>();
+        for (Bilet b : bilete_disponibile) {
+            if (b.verifica_tip_bilet() == CategorieBilet.Bilet_zi || b.verifica_tip_bilet() == CategorieBilet.Bilet_festival) {
+                bileteEligibile.add(b);
+            }
+        }
 
+        if (bileteEligibile.isEmpty()) {
+            System.out.println("Nu aveți bilete de tip zi sau festival.");
+            return;
+        }
 
-    public int getNrBilete(){
-        return bilete_disponibile.size();
+        // Alege biletul
+        System.out.println("Selectați biletul pentru care doriți să adăugați o rezervare:");
+        for (int i = 0; i < bileteEligibile.size(); i++) {
+            Bilet b = bileteEligibile.get(i);
+            System.out.print((i + 1) + ": Tip - " + b.verifica_tip_bilet());
+            if (b.getZi() != null) System.out.print(", Zi: " + b.getZi().tostring());
+            System.out.println();
+        }
+
+        int bIndex = s.nextInt() - 1;
+        s.nextLine();
+        if (bIndex < 0 || bIndex >= bileteEligibile.size()) {
+            System.out.println("Index invalid.");
+            return;
+        }
+
+        Bilet b = bileteEligibile.get(bIndex);
+
+        Zi ziAleasa = null;
+
+        if (b.verifica_tip_bilet() == CategorieBilet.Bilet_zi) {
+            ziAleasa = b.getZi();
+            if (ziAleasa == null) {
+                System.out.println("Biletul de tip zi nu are zi asociată.");
+                return;
+            }
+        } else { // Bilet_festival
+            // Alege o zi din festival
+            System.out.println("Selectați ziua pentru care doriți să adăugați o rezervare:");
+            for (int i = 0; i < zile_festival.size(); i++) {
+                System.out.println((i + 1) + ": " + zile_festival.get(i).tostring());
+            }
+            int ziIndex = s.nextInt() - 1;
+            s.nextLine();
+            if (ziIndex < 0 || ziIndex >= zile_festival.size()) {
+                System.out.println("Index invalid.");
+                return;
+            }
+            ziAleasa = zile_festival.get(ziIndex);
+        }
+
+        // Afișează ecranizările disponibile în ziua aleasă
+        ziAleasa.afiseaza_ecranizari_pe_zi(filme_disponibile, this.permisiuneFilme);
+
+        System.out.println("Selectați numărul ecranizării dorite:");
+        int eIndex = s.nextInt() - 1;
+        s.nextLine();
+        if (eIndex < 0 || eIndex >= ziAleasa.getNrEcranizari()) {
+            System.out.println("Index invalid pentru ecranizare.");
+            return;
+        }
+
+        Ecranizare ecranizare = ziAleasa.get_ecranizarebyindex(eIndex);
+
+        // Se face rezervarea efectivă
+        ecranizare.rezervareLoc(b);
+
+        // Setăm ziua în bilet dacă este festival (bilet_zi deja are)
+        if (b.verifica_tip_bilet() == CategorieBilet.Bilet_festival && b.getZi() == null) {
+            b.setZi(ziAleasa);
+        }
+
+        System.out.println("Rezervarea a fost adăugată cu succes.");
     }
+
 }

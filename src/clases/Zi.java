@@ -47,21 +47,40 @@ public class Zi {
         return false;
     }
 
-    public void afiseaza_ecranizari_pe_zi(ArrayList<Film> filme, RestrictiiFilme perm) {
-        for (int i = 0; i < this.ecranizari.size(); i++) {
-            for (int j = 0; j < filme.size(); j++) {
-                if (filme.get(j).exista_ecranizare(ecranizari.get(i).getEcranizareID()))
-                { if(poateViziona(filme.get(j),perm))
-                        System.out.println((i + 1) + " :" + ecranizari.get(i).tostring_ecranizare() + filme.get(j).tostring_film());
-                  break;
+
+    public boolean anuleazaEcranizare(Ecranizare ecranizare) {
+        if (!ecranizari.contains(ecranizare)) {
+            System.out.println("Ecranizarea nu există în această zi.");
+            return false;
+        }
+        ArrayList<Rezervare> rezervari = new ArrayList<>(ecranizare.getRezervari());
+
+        for (Staff s : ecranizare.getSupraveghetori()) {
+            s.getEcranizari().remove(ecranizare);
+        }
+
+        for (Rezervare rez : rezervari) {
+            int r = rez.getRand();
+            int c = rez.getColoana();
+
+
+            ecranizare.elibereazaLoc(r, c);
+
+            ecranizare.getRezervari().remove(rez);
+
+            for (Bilet b : ecranizare.getBileteCumparate()) {
+                Rezervare[] rezBilet = b.getRezervari();
+                if (rezBilet != null && rezBilet.length > 0) {
+                    ArrayList<Rezervare> filtrate = new ArrayList<>();
+                    for (Rezervare rB : rezBilet) {
+                        if (rB != null && !rB.equals(rez)) {
+                            filtrate.add(rB);
+                        }
+                    }
+                    b.setRezervari(filtrate.toArray(new Rezervare[0]));
                 }
             }
         }
-    }
-
-    public ArrayList<Ecranizare> getEcranizari() {
-        return ecranizari;
-    }
 
     public Ecranizare get_ecranizarebyindex(int index){
         return this.ecranizari.get(index);

@@ -18,11 +18,11 @@ public class Ecranizare {
     private ArrayList<Staff> supraveghetori;
     private ArrayList<Rezervare> rezervari;
 
-    public Ecranizare(String oraInceput, String oraFinal, String data) {
+    //constructori
+    public Ecranizare(String oraInceput, String oraFinal) {
         this.ecranizareID = ++last_id;
         this.oraInceput = oraInceput;
         this.oraFinal = oraFinal;
-        this.data = data;
         this.nrLocuriLibere = 0;
         this.nrRanduri = 0;
         this.nrColoane = 0;
@@ -52,33 +52,21 @@ public class Ecranizare {
         this.oraFinal = oraFinal;
     }
 
-    public String getData() { return data; }
-
-    public void setData(String data) { this.data = data; }
-
-    public int getNrLocuriLibere() {
-        return nrLocuriLibere;
+    public void setData(String data) {
+        this.data = data;
     }
 
-    public ArrayList<Rezervare> getRezervari() {
-        return rezervari;
+    public void setNrLocuriLibere(int nrLocuriLibere) {
+        this.nrLocuriLibere = nrLocuriLibere;
     }
 
-    public ArrayList<Bilet> getBileteCumparate() {
-        return bilete_cumparate;
+    public void setNrRanduri(int nrRanduri) {
+        this.nrRanduri = nrRanduri;
     }
 
-    public ArrayList<Staff> getSupraveghetori() {
-        return supraveghetori;
+    public void setNrColoane(int nrColoane) {
+        this.nrColoane = nrColoane;
     }
-
-    public void setNrLocuriLibere(int nrLocuriLibere) {this.nrLocuriLibere = nrLocuriLibere;}
-
-    public void setNrRanduri(int nrRanduri) {this.nrRanduri = nrRanduri;}
-
-    public int getRanduri() {return nrRanduri;}
-
-    public void setNrColoane(int nrColoane) {this.nrColoane = nrColoane;}
 
     public int getNrColoane() {return nrColoane;}
 
@@ -130,23 +118,14 @@ public class Ecranizare {
 
     }
 
-    public void adaugaEcranizare(Film f, Sala s, Zi z)
-    {
-        boolean SeSuprapun;
-        SeSuprapun = s.alocareSala(this);
-        if (!SeSuprapun) {
-            System.out.println("cacuta");
-            f.adaugaEcranizare(this);
-            z.adauga_ecranizare(this);
+        public void elibereazaLoc ( int rand, int coloana){
+            if (locuri_libere[rand][coloana] == 1) {
+                locuri_libere[rand][coloana] = 0;
+                nrLocuriLibere++;
+            }
         }
-    }
-    public String tostring_ecranizare(){
-        return " de la " +oraInceput + " pana la "+ oraFinal;
-    }
-    public void elibereazaLoc(int rand, int coloana) {
-        if (locuri_libere[rand][coloana] == 1) {
-            locuri_libere[rand][coloana] = 0;
-            nrLocuriLibere++;
+
+        public void adaugaSupraveghetor (Staff supraveghetor){
+            supraveghetori.add(supraveghetor);
         }
-    }
 }

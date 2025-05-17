@@ -43,11 +43,6 @@ public class Sala {
     public void setNrLocuri(int nrLocuri) {
         this.nrLocuri = nrLocuri;
     }
-
-    public int getNrRanduri() {
-        return nrRanduri;
-    }
-
     public void setNrRanduri(int nrRanduri) {   this.nrRanduri = nrRanduri; }
     public int getNrColoane() {
         return nrColoane;
@@ -105,6 +100,6 @@ public class Sala {
         program_ecranizari.add(ecranizare);
         return false;
     }
-
+     
 
 }
