@@ -9,17 +9,20 @@ public class Staff extends Persoana {
     private int salariu;
     private FunctieStaff functie;
     private Zone zonaFestival;
-    private String oraInceputLucru;
     private int nrOreLucru;
+    private int norma;
+
     private ArrayList<Ecranizare> ecranizari;
 
-    public Staff(String nume, String prenume, String email, String telefon, int staffID, int salariu, FunctieStaff functie, String oraInceputLucru, int nrOreLucru, Zone zonaFestival) {
+    //constructori
+    public Staff(String nume, String prenume, String email, String telefon,int salariu, FunctieStaff functie, int nrOreLucru, Zone zonaFestival, int norma) {
         super(nume, prenume, email, telefon);
         this.staffID = ++last_id;
         this.salariu = salariu;
         this.functie = functie;
         this.nrOreLucru = nrOreLucru;
         this.zonaFestival = zonaFestival;
+        this.norma = norma;
         this.ecranizari = new ArrayList<>();
     }
 

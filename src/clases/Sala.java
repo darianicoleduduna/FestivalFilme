@@ -9,8 +9,11 @@ public class Sala {
     private int nrLocuri;
     private int nrRanduri;
     private int nrColoane;
+
+    //relatii
     private ArrayList<Ecranizare> program_ecranizari;
 
+    //contructori
     public Sala(String nume, int nrRanduri, int nrColoane) {
         this.salaId = ++this.last_id;
         this.nume = nume;
@@ -20,41 +23,46 @@ public class Sala {
         program_ecranizari = new ArrayList<Ecranizare>();
     }
 
+    //getters
     public int getSalaId() {
         return salaId;
     }
-
-    public void setSalaId(int salaId) {
-        this.salaId = salaId;
-    }
-
     public String getNume() {
-        return nume;
-    }
-
-    public void setNume(String nume) {
-        this.nume = nume;
-    }
-
+             return nume;
+         }
     public int getNrLocuri() {
         return nrLocuri;
     }
+    public int getNrRanduri() {
+            return nrRanduri;
+        }
+    public int getNrColoane() {
+            return nrColoane;
+        }
+    public ArrayList<Ecranizare> getProgramEcranizari() {
+            return program_ecranizari;
+        }
 
+    //setters
+    public void setSalaId(int salaId) {
+        this.salaId = salaId;
+    }
+    public void setNume(String nume) {
+        this.nume = nume;
+    }
     public void setNrLocuri(int nrLocuri) {
         this.nrLocuri = nrLocuri;
     }
     public void setNrRanduri(int nrRanduri) {   this.nrRanduri = nrRanduri; }
-    public int getNrColoane() {
-        return nrColoane;
-    }
     public void setNrColoane(int nrColoane) {
         this.nrColoane = nrColoane;
     }
 
-    // ora1 > ora2 -> 1;
-    // ora1 < ora2 -> -1;
-    // ora1 = ora2 -> 0
+    //functii speciale
     public int comparareOre(String ora1, String ora2){
+        // ora1 > ora2 -> 1;
+        // ora1 < ora2 -> -1;
+        // ora1 = ora2 -> 0
         String [] ora1_desp = ora1.split(":");
         String [] ora2_desp = ora2.split(":");
         if (ora1.equals(ora2))
@@ -71,8 +79,6 @@ public class Sala {
         else
             return 0;
     }
-
-
     public boolean alocareSala(Ecranizare ecranizare) {
         for(int i=0; i<program_ecranizari.size(); i++)
         {

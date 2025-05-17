@@ -48,6 +48,7 @@ public class Plata {
     public void setStatusPlata(StatusPlata statusPlata) {
         this.statusPlata = statusPlata;
     }
+
     public StatusPlata getStatusPlata() {
         return statusPlata;
     }

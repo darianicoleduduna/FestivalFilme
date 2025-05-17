@@ -25,14 +25,25 @@ public class InterfataTest {
         Zi zi1= new Zi("17.04.2025");
         Zi zi2= new Zi("18.04.2025");
         Zi zi3= new Zi("19.04.2025");
+        System.out.println("FESTIVALUL DE FILME - Diversity Art and Vision (DAV Studios)");
 
 
-        Film [] films = new Film[5];
-        films[0] = new Film("HP1", "2001", "Daria", 120, RestrictiiFilme.AcordParental13ani, CategoriiFilme.Fantasy);
-        films[1] = new Film("HP2", "2002", "Daria", 120, RestrictiiFilme.AcordParental13ani, CategoriiFilme.Fantasy);
-        films[2] = new Film("HP3", "2004", "Daria", 120, RestrictiiFilme.AcordParental13ani, CategoriiFilme.Fantasy);
-        films[3] = new Film("HP4", "2005", "Daria", 120, RestrictiiFilme.AudientaGenerala, CategoriiFilme.Fantasy);
-        films[4] = new Film("HP5", "2007", "Daria", 120, RestrictiiFilme.AudientaGenerala, CategoriiFilme.Fantasy);
+        Film [] films = new Film[15];
+        films[0] = new Film("The Shining", "1980", "Stanley Kubrick", 146, RestrictiiFilme.Interzis18ani, CategoriiFilme.Horror);
+        films[1] = new Film("Harry Potter and the Chamber of Secrets", "2002", "Chris Columbus", 161, RestrictiiFilme.AcordParental13ani, CategoriiFilme.Fantasy);
+        films[2] = new Film("Inception", "2010", "Christopher Nolan", 148, RestrictiiFilme.Restrictionat16ani, CategoriiFilme.Thriller);
+        films[3] = new Film("Flow", "2025", "Gints Zilbalodis", 80, RestrictiiFilme.AudientaGenerala, CategoriiFilme.Animatie);
+        films[4] = new Film("Harry Potter and the Philosopher's Stone", "2001", "Chris Columbus", 152, RestrictiiFilme.AudientaGenerala, CategoriiFilme.Fantasy);
+        films[5] = new Film("The Notebook", "2004", "Nick Cassavetes", 123, RestrictiiFilme.AcordParental13ani, CategoriiFilme.Dragoste);
+        films[6] = new Film("Avengers: Endgame", "2019", "Anthony & Joe Russo", 181, RestrictiiFilme.Restrictionat16ani, CategoriiFilme.Actiune);
+        films[7] = new Film("Frozen", "2013", "Chris Buck & Jennifer Lee", 102, RestrictiiFilme.AudientaGenerala, CategoriiFilme.Animatie);
+        films[8] = new Film("The Matrix", "1999", "The Wachowskis", 136, RestrictiiFilme.Restrictionat16ani, CategoriiFilme.Science_Fiction);
+        films[9] = new Film("The Lion King", "1994", "Roger Allers & Rob Minkoff", 88, RestrictiiFilme.AudientaGenerala, CategoriiFilme.Animatie);
+        films[10] = new Film("Les Misérables", "2012", "Tom Hooper", 158, RestrictiiFilme.AcordParental13ani, CategoriiFilme.Musical);
+        films[11] = new Film("The Conjuring", "2013", "James Wan", 112, RestrictiiFilme.Interzis18ani, CategoriiFilme.Horror);
+        films[12] = new Film("A Beautiful Mind", "2001", "Ron Howard", 135, RestrictiiFilme.AcordParental13ani, CategoriiFilme.Drama);
+        films[13] = new Film("Mamma Mia!", "2008", "Phyllida Lloyd", 108, RestrictiiFilme.AudientaGenerala, CategoriiFilme.Musical);
+        films[14] = new Film("Sherlock Holmes", "2009", "Guy Ritchie", 128, RestrictiiFilme.AcordParental13ani, CategoriiFilme.Mister);
 
         Sala [] sals = new Sala[5];
         sals[0] = new Sala("Sala1", 10, 20);
@@ -199,7 +210,6 @@ public class InterfataTest {
         {
             System.out.println("Alegeti o optiune: ");
             System.out.println("c - optiuni de client");
-            System.out.println("a - optiuni de administrare");
             System.out.println("s - optiuni de staff");
             System.out.println("m - optiuni de manager");
             System.out.println("e - iesire");
@@ -330,7 +340,7 @@ public class InterfataTest {
                     if(logat != null)
                         if (logat.getNrBilete()>0)  {
                             System.out.println("Alegeti cum vreti sa modificati biletul:");
-                            System.out.println("r- rezerva loc");
+                            System.out.println("r - rezerva loc");
                             System.out.println("a - anuleaza bilet");
                             System.out.println("c - anuleaza o rezervare din bilet");
                             optiune = scanner.next().charAt(0);
@@ -578,8 +588,6 @@ public class InterfataTest {
             }
             else if(optiune == 'e')
                 break;
-
-
         }
 
     }

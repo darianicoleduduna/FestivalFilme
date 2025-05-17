@@ -11,6 +11,8 @@ public enum FunctieStaff {
     Voluntar,
     Fotograf_Videograf,
     Angajat_FoodCourt,
-    EchipaIT
+    EchipaIT,
+    Supraveghetor_Sala
 
 }
+

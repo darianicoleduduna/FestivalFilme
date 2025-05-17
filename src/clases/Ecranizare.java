@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Ecranizare {
-    private static int last_id=0;
+    private static int last_id = 0;
     private int ecranizareID;
     private String data;
     private String oraInceput;
@@ -14,6 +14,8 @@ public class Ecranizare {
     private int[][] locuri_libere;
     private int nrRanduri;
     private int nrColoane;
+
+    //relatii
     private ArrayList<Bilet> bilete_cumparate;
     private ArrayList<Staff> supraveghetori;
     private ArrayList<Rezervare> rezervari;
@@ -32,6 +34,7 @@ public class Ecranizare {
 
     }
 
+    //getters
     public int getEcranizareID() {
         return ecranizareID;
     }
@@ -40,12 +43,41 @@ public class Ecranizare {
         return oraInceput;
     }
 
-    public void setOraInceput(String oraInceput) {
-        this.oraInceput = oraInceput;
-    }
-
     public String getOraFinal() {
         return oraFinal;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public int getNrLocuriLibere() {
+        return nrLocuriLibere;
+    }
+
+    public ArrayList<Rezervare> getRezervari() {
+        return rezervari;
+    }
+
+    public ArrayList<Bilet> getBileteCumparate() {
+        return bilete_cumparate;
+    }
+
+    public ArrayList<Staff> getSupraveghetori() {
+        return supraveghetori;
+    }
+
+    public int getRanduri() {
+        return nrRanduri;
+    }
+
+    public int getNrColoane() {
+        return nrColoane;
+    }
+
+    //setters
+    public void setOraInceput(String oraInceput) {
+        this.oraInceput = oraInceput;
     }
 
     public void setOraFinal(String oraFinal) {
@@ -68,13 +100,27 @@ public class Ecranizare {
         this.nrColoane = nrColoane;
     }
 
-    public int getNrColoane() {return nrColoane;}
 
+    //functii speciale
     public void initializare_locuri_libere() {
         locuri_libere = new int[nrRanduri][nrColoane];
-        for(int i=0; i<nrRanduri; i++)
-            for(int j=0; j<nrColoane; j++)
+        for (int i = 0; i < nrRanduri; i++)
+            for (int j = 0; j < nrColoane; j++)
                 locuri_libere[i][j] = 0;
+    }
+
+    public String tostring_ecranizare() {
+        return " de la " + oraInceput + " pana la " + oraFinal + " ";
+    }
+
+    public void adaugaEcranizare(Film f, Sala s, Zi z) {
+        boolean SeSuprapun;
+        this.setData(z.getData());
+        SeSuprapun = s.alocareSala(this);
+        if (!SeSuprapun) {
+            f.adaugaEcranizare(this);
+            z.adauga_ecranizare(this);
+        }
     }
 
     public void afisare_locuri() {
@@ -98,25 +144,24 @@ public class Ecranizare {
     }
 
 
-    public void rezervareLoc ( Bilet bilet) {
+        public void rezervareLoc (Bilet bilet){
 
-        int rloc,cloc;
-        Scanner s = new Scanner(System.in);
-        System.out.println("Alegeti locul 0-dispoonibil, 1- ocupat");
-        afisare_locuri();
-        System.out.println("Introduceti randul dorit");
-        rloc=s.nextInt();
-        System.out.println("Introduceti coloana dorita");
-        cloc=s.nextInt();
-        locuri_libere[rloc-1][cloc -1]=1;
-        nrLocuriLibere--;
-        bilete_cumparate.add(bilet);
-        Rezervare r=new Rezervare(rloc-1,cloc-1);
-        bilet.adaugaRezervare(r);
-        rezervari.add(r);
+            int rloc, cloc;
+            Scanner s = new Scanner(System.in);
+            System.out.println("Alegeti locul 0-dispoonibil, 1- ocupat");
+            afisare_locuri();
+            System.out.println("Introduceti randul dorit");
+            rloc = s.nextInt();
+            System.out.println("Introduceti coloana dorita");
+            cloc = s.nextInt();
+            locuri_libere[rloc - 1][cloc - 1] = 1;
+            nrLocuriLibere--;
+            bilete_cumparate.add(bilet);
+            Rezervare r = new Rezervare(rloc - 1, cloc - 1);
+            bilet.adaugaRezervare(r);
+            rezervari.add(r);
 
-
-    }
+        }
 
         public void elibereazaLoc ( int rand, int coloana){
             if (locuri_libere[rand][coloana] == 1) {
