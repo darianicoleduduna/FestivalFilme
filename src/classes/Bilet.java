@@ -1,6 +1,4 @@
-package clases;
-
-import java.util.ArrayList;
+package classes;
 
 public class Bilet {
     private static int last_id=0;
@@ -50,6 +48,13 @@ public class Bilet {
 
     public CategorieBilet verifica_tip_bilet() {
         return categorieBilet;
+    }
+    public int nrRezervari()
+    {
+        int counter=0;
+        for (Rezervare rezervare : rezervari)
+            if (rezervare != null) counter++;
+        return counter;
     }
 
 

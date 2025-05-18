@@ -1,6 +1,5 @@
-package clases;
+package classes;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -144,7 +143,7 @@ public class Ecranizare {
     }
 
 
-        public void rezervareLoc (Bilet bilet){
+        public void rezervareLoc1 (Bilet bilet){
 
             int rloc, cloc;
             Scanner s = new Scanner(System.in);
@@ -162,8 +161,24 @@ public class Ecranizare {
             rezervari.add(r);
 
         }
+    public void rezervareLoc(Bilet bilet, int rloc, int cloc) {
+        if (locuri_libere[rloc - 1][cloc - 1] == 1) {
+            System.out.println("Locul este deja ocupat!");
+            return;
+        }
 
-        public void elibereazaLoc ( int rand, int coloana){
+        locuri_libere[rloc - 1][cloc - 1] = 1;
+        nrLocuriLibere--;
+
+        Rezervare r = new Rezervare(rloc - 1, cloc - 1);
+        rezervari.add(r);
+        bilet.adaugaRezervare(r);
+        bilete_cumparate.add(bilet);
+    }
+
+
+
+    public void elibereazaLoc ( int rand, int coloana){
             if (locuri_libere[rand][coloana] == 1) {
                 locuri_libere[rand][coloana] = 0;
                 nrLocuriLibere++;

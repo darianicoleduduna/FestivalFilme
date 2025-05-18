@@ -1,7 +1,7 @@
-package clases;
+package classes;
 
 import java.util.ArrayList;
-import static clases.InterfataTest.profit_festival;
+import static classes.InterfataTest.profit_festival;
 
 public class Staff extends Persoana {
     private static int last_id=0;

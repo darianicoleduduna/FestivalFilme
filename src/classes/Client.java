@@ -1,4 +1,4 @@
-package clases;
+package classes;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -8,7 +8,7 @@ import java.util.Scanner;
 import java.time.temporal.ChronoUnit;
 
 
-import static clases.InterfataTest.profit_festival;
+import static classes.InterfataTest.profit_festival;
 
 public class Client extends Persoana {
     private static int last_id = 0;
@@ -43,7 +43,7 @@ public class Client extends Persoana {
 
 
     //functii speciale
-    public ArrayList<Bilet> cumparaBilet( ArrayList<Film> filme_disponibile, ArrayList<Zi> zile_festival)
+    /*public ArrayList<Bilet> cumparaBilet( ArrayList<Film> filme_disponibile, ArrayList<Zi> zile_festival)
     {
         ArrayList<Bilet> bilete_noi = new ArrayList<>();
         int tip_bilet,index;
@@ -137,7 +137,76 @@ public class Client extends Persoana {
         }
         bilete_disponibile.addAll(bilete_noi);
         return bilete_noi;
+    }*/
+
+    public ArrayList<Bilet> cumparaBilet(ArrayList<Film> filme_disponibile, ArrayList<Zi> zile_festival,
+                                         int tip_bilet, ArrayList<Integer> index_zile, ArrayList<Integer> index_filme,
+                                         ArrayList<Integer> index_ecranizari, ArrayList<Integer> randuri,
+                                         ArrayList<Integer> coloane, boolean doreste_rezervari) {
+        ArrayList<Bilet> bilete_noi = new ArrayList<>();
+
+        if (tip_bilet == 3) { // Bilet pentru intreg festivalul
+            Bilet b = new Bilet(CategorieBilet.Bilet_festival);
+            bilete_noi.add(b);
+
+            if (doreste_rezervari) {
+                for (int i = 0; i < index_zile.size(); i++) {
+                    int zi_index = index_zile.get(i);
+                    int ec_index = index_ecranizari.get(i);
+                    int rand = randuri.get(i);
+                    int coloana = coloane.get(i);
+
+                    Zi zi = zile_festival.get(zi_index);
+                    Ecranizare e = zi.get_ecranizarebyindex(ec_index);
+                    e.rezervareLoc(b, rand, coloana);
+                }
+            }
+
+        } else if (tip_bilet == 2) { // Bilet pentru o zi
+            int zi_index = index_zile.get(0);
+            Zi zi = zile_festival.get(zi_index);
+            Bilet b = new Bilet(CategorieBilet.Bilet_zi);
+            b.setZi(zi);
+            bilete_noi.add(b);
+
+            if (doreste_rezervari) {
+                for (int i = 0; i < index_ecranizari.size(); i++) {
+                    int ec_index = index_ecranizari.get(i);
+                    int rand = randuri.get(i);
+                    int coloana = coloane.get(i);
+
+                    Ecranizare e = zi.get_ecranizarebyindex(ec_index);
+                    e.rezervareLoc(b, rand, coloana);
+                }
+            }
+
+        } else if (tip_bilet == 1) { // Bilet pentru un film
+            int film_index = index_filme.get(0);
+            int ec_index = index_ecranizari.get(0);
+            int rand = randuri.get(0);
+            int coloana = coloane.get(0);
+
+            Film f = filme_disponibile.get(film_index);
+            Ecranizare e = f.get_ecranizarebyindex(ec_index);
+
+            Bilet b = new Bilet(CategorieBilet.Bilet_film);
+
+            // Căutăm ziua care conține ecranizarea
+            for (Zi zi : zile_festival) {
+                if (zi.exista_ecranizare(e.getEcranizareID())) {
+                    b.setZi(zi);
+                    break;
+                }
+            }
+
+            e.rezervareLoc(b, rand, coloana);
+            bilete_noi.add(b);
+        }
+
+        bilete_disponibile.addAll(bilete_noi);
+        return bilete_noi;
     }
+
 
     private boolean areRezervariValide(Rezervare[] rezervari) {
         if (rezervari == null) return false;
@@ -235,7 +304,7 @@ public class Client extends Persoana {
     }
 
 
-    public Plata plateste(Bilet[] bilete){
+    /*public Plata plateste(Bilet[] bilete){
         Scanner scanner = new Scanner(System.in);
         float s = 0;
         for (Bilet b : bilete) {
@@ -270,6 +339,27 @@ public class Client extends Persoana {
         }
         Plata p = new Plata();
         p.setStatusPlata(StatusPlata.Esuata);
+        return p;
+    }*/
+
+    public Plata plateste(Bilet[] bilete, boolean confirmaPlata, MetodaPlata metoda) {
+        float s = 0;
+        for (Bilet b : bilete) {
+            if (b.verifica_tip_bilet() == CategorieBilet.Bilet_zi) s += 100;
+            if (b.verifica_tip_bilet() == CategorieBilet.Bilet_festival) s += 250;
+            if (b.verifica_tip_bilet() == CategorieBilet.Bilet_film) s += 40;
+        }
+
+        if (!confirmaPlata) {
+            Plata p = new Plata();
+            p.setStatusPlata(StatusPlata.Esuata);
+            return p;
+        }
+
+        String data_curenta = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        Plata p = new Plata(data_curenta, s, metoda, bilete);
+        System.out.println("Plata inregistrata. Procesarea platii poate dura cateva minute.");
+        profit_festival += s;
         return p;
     }
 
@@ -585,7 +675,7 @@ public class Client extends Persoana {
         Ecranizare ecranizare = ziAleasa.get_ecranizarebyindex(eIndex);
 
         // Se face rezervarea efectivă
-        ecranizare.rezervareLoc(b);
+        ecranizare.rezervareLoc1(b);
 
         // Setăm ziua în bilet dacă este festival (bilet_zi deja are)
         if (b.verifica_tip_bilet() == CategorieBilet.Bilet_festival && b.getZi() == null) {

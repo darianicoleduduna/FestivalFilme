@@ -1,5 +1,4 @@
-package clases;
-import java.sql.SQLOutput;
+package classes;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -180,7 +179,7 @@ public class InterfataTest {
         filme.add(films[12]);
         filme.add(films[13]);
         filme.add(films[14]);
-        Client vlad = new Client("vlad", "rares", "vlad@gmail.com", "0745022251", "13.03.2000");
+        Client vlad = new Client("vlad", "rares", "vlad@gmail.com", "0745022251", "13.03.2012");
         vlad.setareRestrictiiFilme();
         clienti.add(vlad);
 
@@ -295,7 +294,7 @@ public class InterfataTest {
                         System.out.println("Emailul invalid. Introduceti emailul valid sau creati-va cont de client");
                     }
                 }
-                else if (optiune == 'c')
+                /*else if (optiune == 'c')
                 {
                     if(logat != null) {
                         ArrayList<Bilet> bilete_client = logat.cumparaBilet(filme, zile);
@@ -305,8 +304,160 @@ public class InterfataTest {
                     }
                     else
                         System.out.println("Trebuie sa va logati. Alegeti l.");
+                }*/
+                else if (optiune == 'c') {
+                    if (logat != null) {
+                        Scanner s = new Scanner(System.in);
+                        ArrayList<Integer> index_zile = new ArrayList<>();
+                        ArrayList<Integer> index_filme = new ArrayList<>();
+                        ArrayList<Integer> index_ecranizari = new ArrayList<>();
+                        ArrayList<Integer> randuri = new ArrayList<>();
+                        ArrayList<Integer> coloane = new ArrayList<>();
+                        boolean doreste_rezervari = false;
+
+                        System.out.println("Alegeti tipul biletului:");
+                        System.out.println("1 - Bilet pentru un film");
+                        System.out.println("2 - Bilet pentru o zi din festival");
+                        System.out.println("3 - Bilet pentru intreg festivalul");
+
+                        int tip_bilet;
+                        do {
+                            System.out.print("Optiunea dvs: ");
+                            tip_bilet = s.nextInt();
+                            s.nextLine();
+                        } while (tip_bilet < 1 || tip_bilet > 3);
+
+                        if (tip_bilet == 3) {
+                            System.out.print("Doriti sa rezervati locuri pentru diverse ecranizari? (d/n): ");
+                            char rasp = s.nextLine().charAt(0);
+                            doreste_rezervari = (rasp == 'd');
+
+                            while (rasp =='d') {
+                                System.out.println("Alegeti o zi:");
+                                for (int i = 0; i < zile.size(); i++)
+                                    System.out.println((i + 1) + ": " + zile.get(i).tostring());
+                                int zi_index = s.nextInt() - 1;
+                                s.nextLine();
+                                Zi zi_temp = zile.get(zi_index);
+                                zi_temp.afiseaza_ecranizari_pe_zi(filme, logat.getPermisiuneFilme());
+
+                                System.out.print("Alegeti nr ecranizarii dorite: ");
+                                int ec_index = s.nextInt() - 1;
+                                s.nextLine();
+                                zi_temp.get_ecranizarebyindex(ec_index).afisare_locuri();
+                                System.out.print("Introduceti randul dorit: ");
+                                int rand = s.nextInt();
+                                s.nextLine();
+
+                                System.out.print("Introduceti coloana dorita: ");
+                                int coloana = s.nextInt();
+                                s.nextLine();
+
+                                index_zile.add(zi_index);
+                                index_ecranizari.add(ec_index);
+                                randuri.add(rand);
+                                coloane.add(coloana);
+
+                                System.out.print("Doriti sa mai rezervati? (d/n): ");
+                                rasp = s.nextLine().charAt(0);
+                            }
+
+                        } else if (tip_bilet == 2) {
+                            System.out.println("Alegeti o zi:");
+                            for (int i = 0; i < zile.size(); i++)
+                                System.out.println((i + 1) + ": " + zile.get(i).tostring());
+                            int zi_index = s.nextInt() - 1;
+                            s.nextLine();
+                            index_zile.add(zi_index);
+                            Zi zi_temp = zile.get(zi_index);
+
+                            System.out.print("Doriti sa rezervati locuri la ecranizari? (d/n): ");
+                            char rasp = s.nextLine().charAt(0);
+                            doreste_rezervari = (rasp == 'd');
+
+                            while (rasp=='d') {
+                                zi_temp.afiseaza_ecranizari_pe_zi(filme, logat.getPermisiuneFilme());
+
+                                System.out.print("Alegeti nr ecranizarii dorite: ");
+                                int ec_index = s.nextInt() - 1;
+                                s.nextLine();
+                                zi_temp.get_ecranizarebyindex(ec_index).afisare_locuri();
+                                System.out.print("Introduceti randul dorit: ");
+                                int rand = s.nextInt();
+                                s.nextLine();
+
+                                System.out.print("Introduceti coloana dorita: ");
+                                int coloana = s.nextInt();
+                                s.nextLine();
+
+                                index_ecranizari.add(ec_index);
+                                randuri.add(rand);
+                                coloane.add(coloana);
+
+                                System.out.print("Doriti sa mai rezervati? (d/n): ");
+                                rasp = s.nextLine().charAt(0);
+                            }
+
+                        } else if (tip_bilet == 1) {
+                            System.out.println("Filmele disponibile sunt:");
+                            for (int i = 0; i < filme.size(); i++)
+                                if (logat.poateViziona(filme.get(i)))
+                                    System.out.println((i + 1) + ": " + filme.get(i).tostring_film());
+
+                            System.out.print("Introduceti nr filmului dorit: ");
+                            int film_index = s.nextInt() - 1;
+                            s.nextLine();
+                            index_filme.add(film_index);
+
+                            filme.get(film_index).afiseaza_ecranizari(zile);
+
+                            System.out.print("Introduceti nr ecranizarii dorite: ");
+                            int ec_index = s.nextInt();
+                            s.nextLine();
+                            index_ecranizari.add(ec_index);
+
+                            System.out.print("Introduceti randul dorit: ");
+                            int rand = s.nextInt();
+                            s.nextLine();
+
+                            System.out.print("Introduceti coloana dorita: ");
+                            int coloana = s.nextInt();
+                            s.nextLine();
+
+                            randuri.add(rand);
+                            coloane.add(coloana);
+
+                            // determinăm și ziua în care se află ecranizarea
+                            for (int i = 0; i < zile.size(); i++) {
+                                if (zile.get(i).exista_ecranizare(filme.get(film_index).get_ecranizarebyindex(ec_index).getEcranizareID())) {
+                                    index_zile.add(i);
+                                    break;
+                                }
+                            }
+                        }
+
+                        ArrayList<Bilet> bilete_client = logat.cumparaBilet(
+                                filme,
+                                zile,
+                                tip_bilet,
+                                index_zile,
+                                index_filme,
+                                index_ecranizari,
+                                randuri,
+                                coloane,
+                                doreste_rezervari
+                        );
+
+                        if (bilete_client != null)
+                            bilete_temp.addAll(bilete_client);
+
+                    } else {
+                        System.out.println("Trebuie sa va logati. Alegeti l.");
+                    }
                 }
-                else if (optiune == 'p')
+
+
+                /*else if (optiune == 'p')
                 {
                     if (logat != null && !bilete_temp.isEmpty()) {
                         Bilet[] bileteArray = new Bilet[bilete_temp.size()];
@@ -317,6 +468,51 @@ public class InterfataTest {
                             bilete_temp.clear();
                             plati.add(plata);
                         }
+                    } else if (logat == null) {
+                        System.out.println("Trebuie sa va logati. Alegeti l.");
+                    } else {
+                        System.out.println("Nu aveti bilete de platit.");
+                    }
+                }*/
+                else if (optiune == 'p') {
+                    if (logat != null && !bilete_temp.isEmpty()) {
+                        Scanner s = new Scanner(System.in);
+
+                        Bilet[] bileteArray = new Bilet[bilete_temp.size()];
+                        bilete_temp.toArray(bileteArray);
+
+                        float total = 0;
+                        for (Bilet b : bileteArray) {
+                            if (b.verifica_tip_bilet() == CategorieBilet.Bilet_zi) total += 100;
+                            if (b.verifica_tip_bilet() == CategorieBilet.Bilet_festival) total += 250;
+                            if (b.verifica_tip_bilet() == CategorieBilet.Bilet_film) total += 40;
+                        }
+
+                        System.out.println("Aveti de plata " + total + " lei. Continuati? (d/n): ");
+                        char rasp = s.nextLine().charAt(0);
+                        boolean confirma = (rasp == 'd');
+
+                        MetodaPlata metoda = null;
+                        if (confirma) {
+                            int optiunePlata;
+                            do {
+                                System.out.println("Cum doriti sa efectuati plata? 1 - Cash, 2 - Card, 3 - Transfer:");
+                                optiunePlata = s.nextInt();
+                                s.nextLine();
+                            } while (optiunePlata < 1 || optiunePlata > 3);
+
+                            if (optiunePlata == 1) metoda = MetodaPlata.Cash;
+                            else if (optiunePlata == 2) metoda = MetodaPlata.Card;
+                            else if (optiunePlata == 3) metoda = MetodaPlata.Transfer;
+                        }
+
+                        Plata plata = logat.plateste(bileteArray, confirma, metoda);
+                        if (plata != null && (plata.getStatusPlata() == StatusPlata.Procesata || plata.getStatusPlata() == StatusPlata.In_asteptare)) {
+                            bilete.addAll(bilete_temp);
+                            bilete_temp.clear();
+                            plati.add(plata);
+                        }
+
                     } else if (logat == null) {
                         System.out.println("Trebuie sa va logati. Alegeti l.");
                     } else {
