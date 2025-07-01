@@ -1,6 +1,6 @@
-# FestivalFilme
+# MovieFestival
 
-**FestivalFilme** is a Java application designed to simulate and manage a film festival. It includes features for booking and purchasing tickets, managing staff and screening rooms, handling payments, and organizing films by categories and restrictions.
+**MovieFestival** is a Java application designed to simulate and manage a film festival. It includes features for booking and purchasing tickets, managing staff and screening rooms, handling payments, and organizing films by categories and restrictions.
 
 ---
 
