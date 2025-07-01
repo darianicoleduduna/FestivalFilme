@@ -72,7 +72,7 @@ Depicts the sequence of messages exchanged between objects over time.
 ![Sequence Diagram](Diagrams/DiagramaSecventialaProiect.png)
 
 ## Authors
-- @darianicoleduduna
-- @vladraresenache
-- @PaunAlexandra
+- [@darianicoleduduna](https://github.com/darianicoleduduna)
+- [@vladraresenache](https://github.com/vladraresenache)
+- [@PaunAlexandra](https://github.com/PaunAlexandra)
 This project was developed as part of the *Software Systems Engineering* course.
