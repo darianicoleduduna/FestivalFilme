@@ -46,6 +46,8 @@ public class Bilet {
         indexr++;
     }
 
+
+
     public CategorieBilet verifica_tip_bilet() {
         return categorieBilet;
     }

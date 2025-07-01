@@ -41,7 +41,18 @@ public class Plata {
         }, 1, TimeUnit.MINUTES);
 
     }
-    
+
+    public float getSuma() {
+        return suma;
+    }
+
+    public MetodaPlata getMetoda() {
+        return metodaPlata;
+    }
+    public Bilet[] getBilete() {
+        return bilete_cump;
+    }
+
     public void setStatusPlata(StatusPlata statusPlata) {
         this.statusPlata = statusPlata;
     }

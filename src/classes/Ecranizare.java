@@ -142,39 +142,20 @@ public class Ecranizare {
         }
     }
 
+        public void rezervareLoc(Bilet bilet, int rloc, int cloc) {
+            if (locuri_libere[rloc - 1][cloc - 1] == 1) {
+                System.out.println("Locul este deja ocupat!");
+                return;
+            }
 
-        public void rezervareLoc1 (Bilet bilet){
-
-            int rloc, cloc;
-            Scanner s = new Scanner(System.in);
-            System.out.println("Alegeti locul 0-dispoonibil, 1- ocupat");
-            afisare_locuri();
-            System.out.println("Introduceti randul dorit");
-            rloc = s.nextInt();
-            System.out.println("Introduceti coloana dorita");
-            cloc = s.nextInt();
             locuri_libere[rloc - 1][cloc - 1] = 1;
             nrLocuriLibere--;
-            bilete_cumparate.add(bilet);
+
             Rezervare r = new Rezervare(rloc - 1, cloc - 1);
-            bilet.adaugaRezervare(r);
             rezervari.add(r);
-
+            bilet.adaugaRezervare(r);
+            bilete_cumparate.add(bilet);
         }
-    public void rezervareLoc(Bilet bilet, int rloc, int cloc) {
-        if (locuri_libere[rloc - 1][cloc - 1] == 1) {
-            System.out.println("Locul este deja ocupat!");
-            return;
-        }
-
-        locuri_libere[rloc - 1][cloc - 1] = 1;
-        nrLocuriLibere--;
-
-        Rezervare r = new Rezervare(rloc - 1, cloc - 1);
-        rezervari.add(r);
-        bilet.adaugaRezervare(r);
-        bilete_cumparate.add(bilet);
-    }
 
 
 
