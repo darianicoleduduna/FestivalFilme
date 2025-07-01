@@ -7,15 +7,18 @@ public class Zi {
 
     private ArrayList<Ecranizare> ecranizari;
 
+
     public Zi() {
         data = "";
         ecranizari = new ArrayList<>();
+
 
     }
 
     public Zi(String data) {
         this.data = data;
         ecranizari = new ArrayList<>();
+
 
     }
 
