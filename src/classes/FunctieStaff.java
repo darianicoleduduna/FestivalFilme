@@ -1,7 +1,8 @@
-package clases;
+package classes;
 
 public enum FunctieStaff {
     Manager_Festival,
+    Director,
     Coordonator_Sala,
     Echipa_de_Ospitalitate,
     Paza,
@@ -10,6 +11,8 @@ public enum FunctieStaff {
     Voluntar,
     Fotograf_Videograf,
     Angajat_FoodCourt,
-    EchipaIT
+    EchipaIT,
+    Supraveghetor_Sala
 
 }
+

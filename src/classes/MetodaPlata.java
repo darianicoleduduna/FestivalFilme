@@ -1,4 +1,4 @@
-package clases;
+package classes;
 
 public enum MetodaPlata {
     Cash,

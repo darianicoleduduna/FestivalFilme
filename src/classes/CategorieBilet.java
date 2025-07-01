@@ -1,4 +1,4 @@
-package clases;
+package classes;
 
 public enum CategorieBilet {
     Bilet_zi,
