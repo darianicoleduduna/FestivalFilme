@@ -2,6 +2,8 @@
 
 **FestivalFilme** is a Java application designed to simulate and manage a film festival. It includes features for booking and purchasing tickets, managing staff and screening rooms, handling payments, and organizing films by categories and restrictions.
 
+---
+
 ## Project Structure
 
 - `src/classes/` – core classes:
@@ -17,7 +19,7 @@
     - `ManagerTest.java`
 
 - `InterfataTest.java` – CLI interface for testing
-
+---
 ## Features
 
 - View film schedules and screenings
@@ -27,6 +29,8 @@
 - Manage staff roles and access
 - Enforce age restrictions and prevent scheduling conflicts
 
+---
+
 ## Technologies Used
 
 - Java 
@@ -34,6 +38,8 @@
 - Object-Oriented Programming (OOP)
 - Git for bversion Control
 - Visio for UML Diagrams
+
+---
 
 ## UML Diagrams
 
@@ -75,4 +81,5 @@ Depicts the sequence of messages exchanged between objects over time.
 - [@darianicoleduduna](https://github.com/darianicoleduduna)
 - [@vladraresenache](https://github.com/vladraresenache)
 - [@PaunAlexandra](https://github.com/PaunAlexandra)
+
 This project was developed as part of the *Software Systems Engineering* course.
